@@ -32,7 +32,36 @@ panel2 = new Ext.Panel({
             xtype: 'panel',
             flex: 1,
             padding: 10,
-            html: 'Тут решение'
+            layout: {
+                type: 'hbox'
+            },
+            //html: 'Тут решение'
+            items: [{
+                xtype: 'combo',
+                id: 'combo',
+                mode: 'local',
+                store: new Ext.data.ArrayStore ({
+                    storeId: 'myStore',
+                    id: 0,
+                    fields: [
+                        'myId',
+                        'displayText'
+                    ],
+                    data: [[1, 'test1'], [2, 'test2']]
+                }),
+                valueField: 'myId',
+                displayField: 'displayText',
+                triggerAction: 'all'
+            }, {
+                xtype: 'button',
+                text: 'Добавить',
+                width: 70,
+                height: 30,
+                handler: function () {
+                    var data = [['3', 'test3']];
+                    Ext.getCmp('combo').getStore().add(data)
+                }
+            }]
         }
     ]
 });

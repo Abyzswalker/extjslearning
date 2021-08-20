@@ -31,7 +31,23 @@ panel1 = new Ext.Panel({
             xtype: 'panel',
             flex: 1,
             padding: 10,
-            html: 'Тут решение'
+            //html: 'Тут решение',
+            items: [{
+                id: 'btn',
+                xtype: 'button',
+                text: 'Кнопка',
+                handler: function () {
+                    Ext.getCmp('btn2').setVisible(true)
+                    window.setTimeout(function() {
+                        Ext.getCmp('btn').setDisabled(true)
+                    }, 3000);
+                }
+            }, {
+                id: 'btn2',
+                xtype: 'button',
+                text: 'Кнопка 2',
+                hidden: true,
+            }]
         }
     ]
 });
