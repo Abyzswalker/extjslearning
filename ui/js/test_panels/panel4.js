@@ -32,7 +32,28 @@ panel4 = new Ext.Panel({
             xtype: 'panel',
             flex: 1,
             padding: 10,
-            html: 'Тут решение'
+            items: [{
+                xtype: 'datefield',
+                id: 'datefield1',
+                format: 'd.m.y',
+                listeners: {
+                    select: function (picker, date) {
+                        var click = Ext.getCmp('datefield1').getValue();
+                        var nd = new Date (click);
+                        var dt = nd.format('Y-m-d');
+                        Ext.getCmp('textpanel4').update(click);
+                        Ext.getCmp('datefield2').setValue(dt)
+                    }
+                }
+            }, {
+                xtype: 'datefield',
+                id: 'datefield2',
+                format: 'Y-m-d'
+            }, {
+                xtype: 'panel',
+                id: 'textpanel4',
+                html: []
+            }]
         }
     ]
 });

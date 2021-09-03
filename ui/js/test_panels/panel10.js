@@ -31,7 +31,38 @@ panel10 = new Ext.Panel({
             xtype: 'panel',
             flex: 1,
             padding: 10,
-            html: 'Тут решение'
+            //html: 'Тут решение'
+            items: [{
+                xtype: 'tabpanel',
+                id: 'tabpanel10',
+                activeTab: 0,
+                items: [{
+                    title: 'Tab 1',
+                    id: 'tab1',
+                    html: 'A simple tab'
+                },{
+                    title: 'Tab 2',
+                    id: 'tab2',
+                    html: 'Another one',
+                    listeners: {
+                        activate: function () {
+                            var tabpanel = Ext.getCmp('tabpanel10');
+                            tabpanel.items['items'][2].enable();
+                        }
+                    }
+                },{
+                    title: 'Tab 3',
+                    id: 'tab3',
+                    html: 'Another one',
+                    disabled: 'true',
+                    listeners: {
+                        activate: function () {
+                            var tabpanel = Ext.getCmp('tabpanel10');
+                            tabpanel.items['items'][0].disable();
+                        }
+                    }
+                }]
+            }]
         }
     ]
 });

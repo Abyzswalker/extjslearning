@@ -1,3 +1,13 @@
+var myStore = new Ext.data.ArrayStore ({
+        storeId: 'myStore',
+        fields: [
+            'id',
+            'name'
+        ],
+        data: [[1, 'test1'], [2, 'test2']],
+    });
+
+
 panel2 = new Ext.Panel({
     title: 'Задание 2',
     listeners: {
@@ -30,37 +40,76 @@ panel2 = new Ext.Panel({
             ].join('<br/>')
         }, {
             xtype: 'panel',
-            flex: 1,
-            padding: 10,
-            layout: {
-                type: 'hbox'
-            },
-            //html: 'Тут решение'
+            layout: 'hbox',
             items: [{
                 xtype: 'combo',
                 id: 'combo',
                 mode: 'local',
-                store: new Ext.data.ArrayStore ({
-                    storeId: 'myStore',
-                    id: 0,
-                    fields: [
-                        'myId',
-                        'displayText'
-                    ],
-                    data: [[1, 'test1'], [2, 'test2']]
-                }),
-                valueField: 'myId',
-                displayField: 'displayText',
-                triggerAction: 'all'
+                store: myStore,
+                valueField: 'id',
+                displayField: 'name',
+                triggerAction: 'all',
             }, {
                 xtype: 'button',
                 text: 'Добавить',
                 width: 70,
                 height: 30,
                 handler: function () {
-                    var data = [['3', 'test3']];
-                    Ext.getCmp('combo').getStore().add(data)
+                    var id = myStore.getTotalCount()
+                    var data = Ext.getCmp('combo').getValue();
+                    var rec = new Ext.data.Record({id: id++, name:data});
+
+                    myStore.add(rec);
                 }
+            }]
+        }, {
+            xtype: 'panel',
+            layout: 'hbox',
+            items: [{
+                xtype: 'combo',
+                id: 'combo2',
+                fieldLabel: "",
+                mode: 'remote',
+                store: new Ext.data.Store({
+                    proxy: new Ext.data.HttpProxy({url: "api.php"}),
+                    baseParams: {param1: 1},
+                    reader: new Ext.data.JsonReader(
+                        {root: 'data', totalProperty: 'total', id: 'id'},
+                        ['id', 'name']
+                    ),
+                    remoteSort: true,
+                    autoLoad: false
+                }),
+                listeners: {
+                    'select': function(combo, record) {
+                    }, scope: this,
+                    'beforequery': function (evt) {
+                        evt.combo.query = null
+                    }
+                },
+                valueField:'id',
+                displayField:'name',
+                pageSize: this.pageSize,
+                allowBlank: true,
+                anchor: '100%',
+                minChars: 0,
+                triggerAction: 'all'
+            }, {
+                xtype: 'button',
+                text: 'Обновить',
+                width: 70,
+                height: 30,
+                handler: function (btn) {
+                     // var combo = panel.findByType('combo')[0];
+                        var combo = Ext.getCmp('combo2');
+                        if (combo) {
+                            var store = combo.getStore();
+                            console.log(combo)
+                            store.baseParams.block_id = 123;
+                            store.load({params: {param1: 2}});
+                            //console.error("combo=", combo.getStore());
+                        }
+                    }
             }]
         }
     ]
